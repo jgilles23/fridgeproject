@@ -84,6 +84,12 @@ function loadContent(){
 		'  </div>'+
 		'</div>');
 	$('div#content').append( contentOverview );
+    
+    $("input[name='radio']").click(function() {
+    var option = this.val();
+    });
+
+    $.post(https://netfridge-jgiles.c9users.io,option);
 	
 	// Load Reports
 	var contentReports = $(
