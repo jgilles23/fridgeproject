@@ -60,7 +60,26 @@ function loadContent(){
 		'      <h2 class="sub-header">Overview</h2>'+
 		'    </div>'+
 		'	   <div class="col-md-8 content-left">'+
-		'      This webpage is an example of a dashboard.</div>'+
+		'      This webpage is an example of a dashboard.
+        '<div>
+        '<input type="radio" id="radio01" name="radio" />
+        '<label for="radio01"><span></span>Perishables</label>
+        '</div>
+
+        '<div>
+        '<input type="radio" id="radio02" name="radio" />
+        '<label for="radio02"><span></span>Drinks</label>
+        '</div>
+
+        '<div>
+        '<input type="radio" id="radio03" name="radio" />
+        '<label for="radio03"><span></span>Off</label>
+        '</div>
+
+        '<script>
+        'window.alert(option);
+        '</script>
+        '</div>'+
 		'	   <div class="col-md-4 content-right"></div>'+
 		'  </div>'+
 		'</div>');
