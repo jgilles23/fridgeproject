@@ -21,7 +21,7 @@ time.sleep(5)
 
 # Change the port name to match the port 
 # to which your Arduino is connected. 
-serial_port_name = '/dev/ttyACM0' #/dev/ttyACM0 for Rasberry Pi #COM3 For Windows
+serial_port_name = 'COM3' #/dev/ttyACM0 for Rasberry Pi #COM3 For Windows
 ser = serial.Serial(serial_port_name, 9600, timeout=1) 
 
 baseurl = 'https://netfridge-jgilles.c9users.io/' #'https://netfridge-jgilles.c9users.io/?key=CE186' #'http://127.0.0.1:5000/'
