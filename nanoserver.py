@@ -1,9 +1,6 @@
 from flask import Flask, request, jsonify, render_template, send_from_directory
 from nanodb import ConnectDB
 
-("Access-Control-Allow-Origin: *");
-
-
 c = ConnectDB()
 
 app = Flask(__name__)
@@ -36,8 +33,7 @@ def network(network_id):
 
 # Route Stream Requests
 @app.route('/network/<network_id>/object/<objectid>/stream/<streamid>', methods=['GET','POST'])
-def stream(network_id,objectid,streamid):    
-    print 'Reached this point'    
+def stream(network_id,objectid,streamid):
     stream_request = {
         'network_id':network_id,
         'objects':
@@ -191,6 +187,11 @@ def internal_error(error):
 def not_found(error):
     return jsonify(**{'message':'Not a valid endpoint','code':0})
     
-    
+    '''
 if __name__ == '__main__':
     app.run()
+    '''
+# Start the app
+if __name__ == '__main__':
+
+    app.run(host='0.0.0.0',port=8080)
