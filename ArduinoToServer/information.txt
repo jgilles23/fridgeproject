@@ -1,0 +1,11 @@
+Pi -> Arduino Serial Inputs
+0 -- no respose
+2 -- connection recognized (5 blink)
+3 -- data sent to server (1 blink)
+10 -- compressor off
+11 -- compressor on
+
+Arduino previousCompressorState
+2 -- system just turned on
+10 -- compressor off
+11 -- compressor on

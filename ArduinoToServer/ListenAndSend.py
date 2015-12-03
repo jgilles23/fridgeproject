@@ -1,3 +1,4 @@
+#!/usr/bin/python
 """
     Simple program structure
     
@@ -15,15 +16,19 @@ import json
 import datetime
 import time
 
+print "Delay for connection"
+time.sleep(5)
+
 # Change the port name to match the port 
 # to which your Arduino is connected. 
-serial_port_name = 'COM6' # for Windows 
+serial_port_name = '/dev/ttyACM0' #/dev/ttyACM0 for Rasberry Pi #COM3 For Windows
 ser = serial.Serial(serial_port_name, 9600, timeout=1) 
 
-baseurl = 'https://ericserver-jgilles.c9users.io/?key=CE186' #'https://netfridge-jgilles.c9users.io/?key=CE186' #'http://127.0.0.1:5000/'
+baseurl = 'https://netfridge-jgilles.c9users.io/' #'https://netfridge-jgilles.c9users.io/?key=CE186' #'http://127.0.0.1:5000/'
  # Set query (i.e. http://url.com/?key=value).
 
 delay = 0.1 # Delay in seconds
+compressorDelay = 60 #Delay in seconds
 
 # Run once at the start
 def setup():
@@ -41,9 +46,11 @@ def getSerial():
         try: 
             # Read entire line 
             # (until '\n') 
-            x = str(ser.readline()) 
-            print "\r\n"
-            print "Received:", x 
+            x = str(ser.readline())
+            print ""            
+            print "Received:",
+            print x,
+            #new line included in incoming message
             #print "Type:", type(x) 
             #send to the database
             toDatabase(x)
@@ -62,6 +69,9 @@ def toDatabase(string1):
         m = True;
     else:
         print "Not real data"
+        s = 2
+        print "Sent to Arduino: ", s
+        ser.write("2\n")
         return None
     
     #   0 - The first data point, don't actually know what it means
@@ -89,7 +99,7 @@ def toDatabase(string1):
     # Send the data to the server
     #
     # Set url address.
-    base = baseurl
+    base = baseurl #+ '?key=CE186'
     # Set query (i.e. http://url.com/?key=value).
     query = {}
     # Set header.
@@ -97,7 +107,9 @@ def toDatabase(string1):
     
     print "Send:",
     # Generature UNIX timestamps for each data point
-    at = int((datetime.datetime.utcnow() - datetime.datetime.utcfromtimestamp(0)).total_seconds())
+    #at = int((datetime.datetime.utcnow() - datetime.datetime.utcfromtimestamp(0)).total_seconds())
+    at = int(data[1])
+    #print at
     
 #    # Send Unix Time
 #    endpoint = 'network/Demo/object/Waves/stream/Data3'
@@ -106,7 +118,7 @@ def toDatabase(string1):
 #    # Set body (also referred to as data or payload). Body is a JSON string.
 #    body = json.dumps(payload)
 #    # Form and send request. Set timeout to 2 minutes. Receive response.
-#    r = requests.request('post', base + endpoint, data=body, params=query, headers=header, timeout=120 )   
+#    r = requests.request('post', base + endpoint, data=body, params=query, headers=header, timeout=120 )      
     
     # Send Unix Time
     endpoint = 'network/Demo/object/Waves/stream/Unix'
@@ -116,6 +128,8 @@ def toDatabase(string1):
     body = json.dumps(payload)
     # Form and send request. Set timeout to 2 minutes. Receive response.
     r = requests.request('post', base + endpoint, data=body, params=query, headers=header, timeout=10 )
+    #print ""
+    #print r    
     
     # Send Date Time
     endpoint = 'network/Demo/object/Waves/stream/DateTime'
@@ -124,7 +138,7 @@ def toDatabase(string1):
     # Set body (also referred to as data or payload). Body is a JSON string.
     body = json.dumps(payload)
     # Form and send request. Set timeout to 2 minutes. Receive response.
-    r = requests.request('post', base + endpoint, data=body, params=query, headers=header, timeout=120 )
+    r = requests.request('post', base + endpoint, data=body, params=query, headers=header, timeout=10 )
     
     # Send Fridge Temp
     endpoint = 'network/Demo/object/Waves/stream/FridgeTemp'
@@ -152,9 +166,21 @@ def toDatabase(string1):
     body = json.dumps(payload)
     # Form and send request. Set timeout to 2 minutes. Receive response.
     r = requests.request('post', base + endpoint, data=body, params=query, headers=header, timeout=10 )
+    print "."    
     
-    #process the 5th data stream to get data on if the fridge is open or closed
-    processDoor(data[5], data[1])
+#    # Send Compressor On To Server
+#    q = 11
+#    endpoint = 'network/Demo/object/Waves/stream/CompressorState'
+#    payload = [ {'value':q,'at':at } ]
+#    print q,
+#    # Set body (also referred to as data or payload). Body is a JSON string.
+#    body = json.dumps(payload)
+#    # Form and send request. Set timeout to 2 minutes. Receive response.
+#    r = requests.request('post', base + endpoint, data=body, params=query, headers=header, timeout=10 )
+#    print "."      
+    
+    #Turn light on for data sent to server
+    ser.write("3\n") #3 Means data set received
 
 #send the led value to teh serial port
 def send_value(LEDValue):
@@ -169,7 +195,7 @@ def send_value(LEDValue):
         except:
             print "Error in serial write"
 
-def get_database():
+def getCompressor():
     #try to get data from the server
     # Set url address.
     base = baseurl #'https://netfridge-jgilles.c9users.io/?key=CE186' #'http://127.0.0.1:5000/'
@@ -185,32 +211,37 @@ def get_database():
 #        r = requests.request('get', base + endpoint, timeout=120 )
 #        print r
         # Third, read the data from the LEDValue stream
-        endpoint = 'network/Demo/object/Waves/stream/LEDValue'
+        endpoint = 'network/Demo/object/Waves/stream/CompressorState'
         address = base + endpoint
         query = {'limit':1}
+        
+        #print "It got here"        
         
         # Form and send request. Set timeout to 2 minutes. Receive response.
         r = requests.request('get', address, params=query, headers=header, timeout=10 )
         
-        #print r.url
-        # Text is JSON string. Convert to Python dictionary/list
-        #print r.text
-        q = r.text
+        #q = r.text
         #print str(q)
         #print "Type:", type(q) 
         #print q["objects"]
         #print r.text["objects"]
-        #print json.loads( r.text )
+        q = json.loads( r.text )
+        #print "Here is w: "
+        #print q
+        #print q['objects']['Waves']['streams']['CompressorState']
+        w = q['objects']['Waves']['streams']['CompressorState']['points'][0]['value']
+        #print w
         
         #Parse the incoming string to get out integers
-        ints2 =  map(int, re.findall(r'\d+', q))
-        print "Sent to LED: ",        
-        print ints2[1]
-        return ints2[1]
-        #print step
+        #print "Received from Server ", q
+        #ints2 =  map(int, re.findall(r'\d+', q))
+        print "Sent to Ardunio: ", w
+        if w == 10:
+            ser.write("10\n")
+        elif w == 11:
+            ser.write("11\n")
     except:
         print "Error in retreving data from server"
-            
 # Run continuously forever
 # with a delay between calls
 def delayed_loop():
@@ -277,6 +308,7 @@ def main():
     setup()
     # Set start time
     nextLoop = time.time()
+    nextCompressorLoop = time.time()
     while(True):
         # Try loop() and delayed_loop()
         try:
@@ -286,12 +318,17 @@ def main():
                 getSerial()
                 #send_value(get_database()) #This line actually gets and sends the values
                 #delayed_loop()
+            if time.time() > nextCompressorLoop:
+                #If next loop time has passed
+                nextCompressorLoop = time.time() + compressorDelay
+                getCompressor()
         except KeyboardInterrupt:
             # If user enters "Ctrl + C", break while loop
             break
         except:
             # Catch all errors
             print "Unexpected error."
+            time.sleep(1)
     # Call close function
     close()
 

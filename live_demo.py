@@ -26,7 +26,6 @@ def main():
     # 
     # Send the data to the server
     #
-
     # Set url address.
     base = 'http://127.0.0.1:5000/'
     # Set query (i.e. http://url.com/?key=value).
