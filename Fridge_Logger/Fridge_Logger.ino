@@ -22,8 +22,11 @@ OneWire ds(DS18B20_Pin);
 #define OPEN_SYNC_INTERVAL 15000 //time between serial writes when door open
 #define CLOSED_SYNC_INTERVAL 60000 //time between serial writes when door closed
 #define COLLECTION_INTERVAL 2000 //time between collections
-#define READ_INTERVAL 1000 //time between reads of the serial port
+//Compressor Intervals
+#define READ_INTERVAL 2000 //time between reads of the serial port
 #define COMPRESSOR_INTERVAL 300000 //time between compressor acuations = 5min
+#define MAX_ON_INTERVAL 1800000 //if fridge is on for this time turn off
+#define REST_INTERVAL 900000 //if fridge is on for too long rest for this long
 
 uint32_t previousPrint = 0; //millis time of the previos print
 uint32_t previousCollect = 0; //millis time of previous collection of data
@@ -195,29 +198,42 @@ void readData() {
     //---------------------
     //ACTUATE COMPRESSOR
     if (serialIn == 10 || serialIn == 11) {
-      //Actuate the compressor if it has been long enough
-      //Serial.print("Input Value: ");
-      //Serial.print(serialIn);
-      //Serial.print(" Previous State: ");
-      //Serial.println(previousCompressorState);
-      if ((serialIn==10 && previousCompressorState==11) || \
-      (serialIn==11 && previousCompressorState==10)) {
-        //Serial.println("Type 1");
+      //figure out if compressor should be accurate
+      if (serialIn==10) {
+        //Ensure no short cycle and the fridge is off
         if (previousCompressor + COMPRESSOR_INTERVAL <= millis()) {
-          //Serial.println("Blink LED");
-          digitalWrite(compressorLEDpin, serialIn-10);
-          //delay(100);
-          //digitalWrite(compressorLEDpin, LOW);
+          digitalWrite(compressorLEDpin, LOW);
           previousCompressor = millis();
-          previousCompressorState = serialIn;
+          previousCompressorState = 10;
+        }
+      }
+      else if (serialIn==11 && previousCompressorState==10) {
+        //Ensure no chort cycle and turn the fridge on
+        if (previousCompressor + COMPRESSOR_INTERVAL <= millis()) {
+          digitalWrite(compressorLEDpin, HIGH);
+          previousCompressor = millis();
+          previousCompressorState = 11;
+        }
+      }
+      else if (serialIn==11 && previousCompressorState==11) {
+        //ensure the fridge not on for too long, turn off if so
+        Serial.println("Data");
+        Serial.println(previousCompressor);
+        Serial.println(MAX_ON_INTERVAL);
+        Serial.println(previousCompressor + MAX_ON_INTERVAL);
+        Serial.println(millis());
+        if (previousCompressor + MAX_ON_INTERVAL <= millis()) {
+          digitalWrite(compressorLEDpin, LOW);
+          //set previous time to time in future to ensure does not turn on quickly
+          previousCompressor = millis() + REST_INTERVAL;
+          previousCompressorState = 10;
         }
       }
       else if ((previousCompressorState==2)) {
         //Serial.println("Type 2");
         digitalWrite(compressorLEDpin, serialIn-10);
-        //delay(100);
-        //digitalWrite(compressorLEDpin, LOW);
         previousCompressor = millis();
+        Serial.println(previousCompressor);
         previousCompressorState = serialIn;
       }
     }
@@ -334,6 +350,18 @@ void collect(void) {
   }
   else {
     digitalWrite(printLEDpin, LOW);
+  }
+
+//---------------------------
+//CHECK IF TOO COLD
+//if fridge is freezing turn off fridge and delay
+  if (temperatures[0] < 33 && temperatures[0] > -79) {
+    //Esure no short cycle, then turn off
+    if (previousCompressor + COMPRESSOR_INTERVAL <= millis()) {
+      digitalWrite(compressorLEDpin, LOW);
+      previousCompressor = millis() + REST_INTERVAL;
+      previousCompressorState = 10;
+    }
   }
 
 //----------------------------
