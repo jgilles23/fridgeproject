@@ -5,25 +5,30 @@ Created on Thu May 28 11:59:27 2015
 @author: eric
 """
 
-import sqlite3
 import json
 import sys
 import datetime
+
+import sqlite3
+import os
+import psycopg2
+import urlparse
 
 class ConnectDB:
     
     db_details = {
         'name':'nanodb',
         'prefix':'nano_',
-        'type':'SQLite'
+        'type':'PostgreSQL', # Options: PostgreSQL or SQLite
+        'login':None
     }
-    debug = True
-    
+    debug_mode = True
+
     '''
     Print Messages
     '''
     def debug(self,text):
-        if self.debug:
+        if self.debug_mode:
             print text
             
     '''
@@ -35,7 +40,30 @@ class ConnectDB:
             if 'SQLite' == self.db_details['type']:
                 conn = sqlite3.connect(self.db_details['name']+'.sqlite')
                 return [True,conn]
-        except:    
+            elif 'PostgreSQL' == self.db_details['type']:
+                if self.db_details['login'] != None:
+                    conn = psycopg2.connect(
+                        database=self.db_details['database'],
+                        user=self.db_details['user'],
+                        password=self.db_details['password'],
+                        host=self.db_details['host']
+                    )
+                    
+                else:
+                    urlparse.uses_netloc.append("postgres")
+                    url = urlparse.urlparse(os.environ["DATABASE_URL"])
+                    
+                    conn = psycopg2.connect(
+                        database=url.path[1:],
+                        user=url.username,
+                        password=url.password,
+                        host=url.hostname,
+                        port=url.port
+                    )
+            
+                return [True,conn]
+        except:
+            self.debug( sys.exc_info() )
             pass
   
         return [False,None]
