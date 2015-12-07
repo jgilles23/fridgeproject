@@ -27,6 +27,7 @@ OneWire ds(DS18B20_Pin);
 #define COMPRESSOR_INTERVAL 300000 //time between compressor acuations = 5min
 #define MAX_ON_INTERVAL 1800000 //if fridge is on for this time turn off
 #define REST_INTERVAL 900000 //if fridge is on for too long rest for this long
+#define MIN_TEMP 33 //if the temp of the fridge is this low, turn the compressor off and wait
 
 uint32_t previousPrint = 0; //millis time of the previos print
 uint32_t previousCollect = 0; //millis time of previous collection of data
@@ -217,11 +218,11 @@ void readData() {
       }
       else if (serialIn==11 && previousCompressorState==11) {
         //ensure the fridge not on for too long, turn off if so
-        Serial.println("Data");
-        Serial.println(previousCompressor);
-        Serial.println(MAX_ON_INTERVAL);
-        Serial.println(previousCompressor + MAX_ON_INTERVAL);
-        Serial.println(millis());
+        //Serial.println("Data");
+        //Serial.println(previousCompressor);
+        //Serial.println(MAX_ON_INTERVAL);
+        //Serial.println(previousCompressor + MAX_ON_INTERVAL);
+        //Serial.println(millis());
         if (previousCompressor + MAX_ON_INTERVAL <= millis()) {
           digitalWrite(compressorLEDpin, LOW);
           //set previous time to time in future to ensure does not turn on quickly
@@ -233,7 +234,7 @@ void readData() {
         //Serial.println("Type 2");
         digitalWrite(compressorLEDpin, serialIn-10);
         previousCompressor = millis();
-        Serial.println(previousCompressor);
+        //Serial.println(previousCompressor);
         previousCompressorState = serialIn;
       }
     }
@@ -355,7 +356,7 @@ void collect(void) {
 //---------------------------
 //CHECK IF TOO COLD
 //if fridge is freezing turn off fridge and delay
-  if (temperatures[0] < 33 && temperatures[0] > -79) {
+  if (temperatures[0] < MIN_TEMP && temperatures[0] > -79) {
     //Esure no short cycle, then turn off
     if (previousCompressor + COMPRESSOR_INTERVAL <= millis()) {
       digitalWrite(compressorLEDpin, LOW);

@@ -1,6 +1,48 @@
 // Network to display
 var network_id = 'Demo';
 
+$("input[name='radio']").click(function() {
+    var option = this.id;
+
+    //# Set url address.
+    //base = 'http://127.0.0.1:5000/'
+    //# Set query (i.e. http://url.com/?key=value).
+    query = {}
+    //# Set header.
+    header = {'Content-Type':'application/json'}
+    //aat = ((datetime.datetime.utcnow() - datetime.datetime.utcfromtimestamp(0)).total_seconds())
+    at = $.now()
+    //print at
+    //# First, send the sine wave
+    endpoint = 'network/Demo/object/Waves/stream/Results'
+    payload = [ {"value":option , "at":at} ]
+    //# Set body (also referred to as data or payload). Body is a JSON string.
+    //body = application/json.dumps(payload)
+
+
+    $.ajax({
+      type: "POST",
+      url: '/' + endpoint,
+      data: JSON.stringify(payload), //NEEDS TO BE IN PROPER FORMAT
+      success: function () {},
+      contentType: 'application/json',
+      dataType: 'json'
+    });
+
+
+    alert(option);
+    //$.post('http://127.0.0.1:5000',option);
+    //$.post('https://netfridge-jgiles.c9users.io',option);
+    // $.post('/', option, function(msg) {
+    //   if (msg) {
+    //     alert("somebody");
+    //   }
+    // // Do something with the request
+    // }, 'json');
+    // //alert("Your a Dungeon Troll");
+});
+
+
 $(document).ready(function(){
 
 	// Load the content containers
