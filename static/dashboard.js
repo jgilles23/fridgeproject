@@ -22,7 +22,7 @@ $("input[name='radio']").click(function() {
 
     $.ajax({
       type: "POST",
-      url: '/' + endpoint,
+      url: 'https://netfridge-jgilles.c9users.io/' + endpoint,
       data: JSON.stringify(payload), //NEEDS TO BE IN PROPER FORMAT
       success: function () {},
       contentType: 'application/json',
