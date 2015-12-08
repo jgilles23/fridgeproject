@@ -1,5 +1,6 @@
 // Network to display
 var network_id = 'Demo';
+// DOG GOES WOOF JFKD:FJDKSL:FJDKL:FJDK:L
 
 $("input[name='radio']").click(function() {
     console.log(this);
