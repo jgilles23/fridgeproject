@@ -21,7 +21,7 @@ time.sleep(5)
 
 # Change the port name to match the port 
 # to which your Arduino is connected. 
-serial_port_name = 'COM3' #/dev/ttyACM0 for Rasberry Pi #COM3 For Windows
+serial_port_name = '/dev/ttyACM0' #/dev/ttyACM0 for Rasberry Pi #COM3 For Windows
 ser = serial.Serial(serial_port_name, 9600, timeout=1) 
 
 baseurl = 'https://netfridge-jgilles.c9users.io/' #'https://netfridge-jgilles.c9users.io/?key=CE186' #'http://127.0.0.1:5000/'
@@ -109,7 +109,7 @@ def toDatabase(string1):
     # Generature UNIX timestamps for each data point
     #at = int((datetime.datetime.utcnow() - datetime.datetime.utcfromtimestamp(0)).total_seconds())
     at = int(data[1])
-    print at
+    #print at
     
 #    # Send Unix Time
 #    endpoint = 'network/Demo/object/Waves/stream/Data3'
@@ -166,7 +166,9 @@ def toDatabase(string1):
     body = json.dumps(payload)
     # Form and send request. Set timeout to 2 minutes. Receive response.
     r = requests.request('post', base + endpoint, data=body, params=query, headers=header, timeout=10 )
-    print "."    
+    print "."
+    
+    processDoor(data[5],at)
     
 #    # Send Compressor On To Server
 #    q = 11
@@ -219,7 +221,7 @@ def getCompressor():
         
         # Form and send request. Set timeout to 2 minutes. Receive response.
         r = requests.request('get', address, params=query, headers=header, timeout=10 )
-        
+        #print r
         #q = r.text
         #print str(q)
         #print "Type:", type(q) 
@@ -263,6 +265,7 @@ def processDoor(currentDoorState, time):
     #   1 - means closed
     #   0 - means open
     
+    print lastDoorState
     #varible that tells if the time should be reported    
     report = 0
     #figure out if should be reported
@@ -271,16 +274,16 @@ def processDoor(currentDoorState, time):
             report = 0
             lastDoorState = 1
         else:
-            report = 0
+            report = 1
             lastDoorState = 0
     else:
         if currentDoorState == 1:
-            report = 1
+            report = 0
             lastDoorState = 1
         else:
             report = 0
             lastDoorState = 0
-    #print "Report: ", report, ", lastDoor", lastDoorState, ", currentDoor: ", currentDoorState
+    print "Report: ", report, ", lastDoor", lastDoorState, ", currentDoor: ", currentDoorState
     
     if report == 1:
         #SEND THE TIME OF THE DOOR OPENING
@@ -290,7 +293,7 @@ def processDoor(currentDoorState, time):
         # Set header.
         header = {'Content-Type':'application/json'}
         # Generature UNIX timestamps for each data point
-        at = int((datetime.datetime.utcnow() - datetime.datetime.utcfromtimestamp(0)).total_seconds())
+        at = time
         # Send Unix Time
         endpoint = 'network/Demo/object/Waves/stream/OpenTime'
         payload = [ {'value':time,'at':at } ]
@@ -300,7 +303,7 @@ def processDoor(currentDoorState, time):
         body = json.dumps(payload)
         # Form and send request. Set timeout to 2 minutes. Receive response.
         r = requests.request('post', base + endpoint, data=body, params=query, headers=header, timeout=10 )
-    
+        print "Door Opened:", r
     
 # Program Structure    
 def main():
