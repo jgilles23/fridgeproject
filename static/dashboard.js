@@ -30,7 +30,7 @@ $("input[name='radio']").click(function() {
     });
 
 
-    alert(option);
+    alert(option + ' try');
     //$.post('http://127.0.0.1:5000',option);
     //$.post('https://netfridge-jgiles.c9users.io',option);
     // $.post('/', option, function(msg) {
