@@ -32,7 +32,7 @@ $("input[name='radio']").click(function() {
       },
       error: function(e) {
         console.log( e );
-      }
+      },
       contentType: 'application/json',
       dataType: 'json'
     });
