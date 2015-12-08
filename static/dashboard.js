@@ -18,7 +18,7 @@ $("input[name='radio']").click(function() {
     at = $.now()
     //print at
     //# First, send the sine wave
-    endpoint = 'network/Demo/object/Waves/stream/Results3'
+    endpoint = 'network/Demo/object/Waves/stream/Results4'
     payload = [ {"value":option , "at":at} ]
     //# Set body (also referred to as data or payload). Body is a JSON string.
     //body = application/json.dumps(payload)
