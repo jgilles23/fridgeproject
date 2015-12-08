@@ -4,8 +4,7 @@ var network_id = 'Demo';
 $("input[name='radio']").click(function() {
     console.log(this);
     console.log($(this).attr('id'));
-    //console.log(this.id);
-    //consol.log('GO BEARS');
+
     var option = $(this).attr('id');
 
     //# Set url address.
@@ -26,7 +25,7 @@ $("input[name='radio']").click(function() {
 
     $.ajax({
       type: "POST",
-      url: 'https://netfridge-jgilles.c9users.io/' + endpoint,
+      url: '/' + endpoint,
       data: JSON.stringify(payload), //NEEDS TO BE IN PROPER FORMAT
       success: function () {},
       contentType: 'application/json',
@@ -362,6 +361,7 @@ function reloadPlotAndExport( object_id, stream_id ){
 	// The API endpoint for the stream
 	var endpoint = '/network/'+network_id+'/object/'+object_id;
 	endpoint += '/stream/'+stream_id;
+    console.log(endpoint);
 	// Load plot data
 	$.ajax({
 		type: 'GET',
@@ -374,6 +374,7 @@ function reloadPlotAndExport( object_id, stream_id ){
 			// Called when successful
 			// Get the points
 			var points = data.objects[object_id].streams[stream_id].points;
+            console.log(data);
 			// Clear everything in <tbody> element
 			tbody = $('#content-Export tbody').html('');
 			

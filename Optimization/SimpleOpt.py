@@ -115,9 +115,32 @@ def getFridgeData():
     r = requests.request('get', address, params=query, headers=header, timeout=120 )
     #print r.text
     r2 = json.loads(r.text)
-    fridgeTemp = r2['objects']['Waves']['streams']['FridgeTemp']['points']
-    print fridgeTemp
-
+    fridgeTemp = r2['objects']['Waves']['streams']['FridgeTemp']['points'][0]['value']
+    #print fridgeTemp
+    
+    endpoint = 'network/Demo/object/Waves/stream/OutsideTemp'
+    address = base + endpoint
+    query = {'limit':1}
+    r = requests.request('get', address, params=query, headers=header, timeout=120 )
+    #print r.text
+    r2 = json.loads(r.text)
+    outsideTemp = r2['objects']['Waves']['streams']['OutsideTemp']['points'][0]['value']
+    #print outsideTemp
+    
+    endpoint = 'network/Demo/object/Waves/stream/CompressorState'
+    address = base + endpoint
+    query = {'limit':1}
+    r = requests.request('get', address, params=query, headers=header, timeout=120 )
+    #print r.text
+    r2 = json.loads(r.text)
+    compressorState = r2['objects']['Waves']['streams']['CompressorState']['points'][0]['value']
+    #print compressorState
+    return (fridgeTemp, outsideTemp, compressorState)
+    
+def optimize(fridgeTemp, outsideTemp, compressorState):
+    #define parameters
+    xf = 
+    
 # Run continuously forever
 # with a delay between calls
 def delayed_loop():
@@ -128,9 +151,9 @@ mC = getWattTimeData()
 #print mC
 cost = getCostData()
 #print cost
-getFridgeData()
-#optim(mC, cost)
+(fridgeTemp, outsideTemp, compressorState) = getFridgeData()
 
-#getPyisoData()  
+optimize(fridgeTemp, outsideTemp, compressorState)
+print fridgeTemp, outsideTemp, compressorState
 
 print time.gmtime(int(time.time()))
