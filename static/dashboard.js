@@ -5,7 +5,7 @@ $("input[name='radio']").click(function() {
     console.log(this);
     console.log($(this).attr('id'));
     //console.log(this.id);
-    consol.log('GO BEARS');
+    //consol.log('GO BEARS');
     var option = $(this).attr('id');
 
     //# Set url address.
