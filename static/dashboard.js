@@ -27,8 +27,9 @@ $("input[name='radio']").click(function() {
       type: "POST",
       url: '/' + endpoint,
       data: JSON.stringify(payload), //NEEDS TO BE IN PROPER FORMAT
-      success: function () {
+      success: function ( data ) {
         console.log( "Success" );
+        console.log( data );
       },
       error: function(e) {
         console.log( e );
