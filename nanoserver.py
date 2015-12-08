@@ -1,6 +1,8 @@
 from flask import Flask, request, jsonify, render_template, send_from_directory
 from nanodb import ConnectDB
 
+("Access-Control-Allow-Origin: *");
+
 c = ConnectDB()
 
 app = Flask(__name__)
