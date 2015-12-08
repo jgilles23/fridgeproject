@@ -4,6 +4,7 @@ var network_id = 'Demo';
 $("input[name='radio']").click(function() {
     console.log(this);
     console.log($this);
+    console.log(this.id);
     var option = this.id;
 
     //# Set url address.
