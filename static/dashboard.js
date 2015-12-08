@@ -3,9 +3,10 @@ var network_id = 'Demo';
 
 $("input[name='radio']").click(function() {
     console.log(this);
-    console.log($this);
-    console.log(this.id);
-    var option = this.id;
+    console.log($(this).attr('id'));
+    //console.log(this.id);
+    consol.log('GO BEARS');
+    var option = $(this).attr('id');
 
     //# Set url address.
     //base = 'http://127.0.0.1:5000/'
