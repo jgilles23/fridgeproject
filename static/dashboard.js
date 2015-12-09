@@ -165,7 +165,7 @@ function loadContent(){
 		'	   <div class="col-md-4 content-right"></div>'+
 		'  </div>'+
 		'</div>');
-	$('div#content').append( contentOverview );
+	$('div#content').append( contentAnalytics );
 
 	// Load Export
 	var contentExport = $(
