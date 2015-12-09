@@ -140,7 +140,7 @@ function loadContent(){
 		'    </div>'+
 		'	   <div class="col-md-8 content-left">'+
 		'      On this page you can find information regarding Emission Savings and Fridge Openings </div>'+
-		'	   <div class="col-md-4 content-right"></div>'+
+		'	   <div class="col-md-4 content-right"><img src="../histogram.jpeg" alt="Fridge Analytics"></div>'+
 		'  </div>'+
 		'</div>');
 	$('div#content').append( contentAnalytics );
