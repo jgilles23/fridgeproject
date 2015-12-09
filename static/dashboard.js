@@ -161,7 +161,7 @@ function loadContent(){
 		'      <h2 class="sub-header">Analytics</h2>'+
 		'    </div>'+
 		'	   <div class="col-md-8 content-left">'+
-		'      THIS IS SOME DATA ANALYTICS SHIT AT ITS FINEST BRUH </div>'+
+		'      On this page you can find information regarding Emission Savings and Fridge Openings </div>'+
 		'	   <div class="col-md-4 content-right"></div>'+
 		'  </div>'+
 		'</div>');
