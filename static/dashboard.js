@@ -326,7 +326,7 @@ function loadStreamPlot( object_id, stream_id, active ){
 				type: 'spline'
 		},
 		title: {
-				text: stream_id//'Plot Title'
+				text: 'Plot Title'
 		},
 		subtitle: {
 				text: 
@@ -343,7 +343,7 @@ function loadStreamPlot( object_id, stream_id, active ){
 		},
 		yAxis: {
 				title: {
-						text: stream_id//'Y-label'
+						text: 'Y-label'
 				}
 		},
 		tooltip: {
