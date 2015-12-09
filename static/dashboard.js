@@ -139,8 +139,8 @@ function loadContent(){
 		'      <h2 class="sub-header">Analytics</h2>'+
 		'    </div>'+
 		'	   <div class="col-md-8 content-left">'+
-		'      On this page you can find information regarding Emission Savings and Fridge Openings </div>'+
-		'	   <div class="col-md-4 content-right"><img src="histogram.jpg" alt="Fridge Analytics"></div>'+
+		'      On this page you can find information regarding Emission Savings and Fridge Openings <img src="histogram.jpg" alt="Fridge Analytics"></div>'+
+		'	   <div class="col-md-4 content-right"></div>'+
 		'  </div>'+
 		'</div>');
 	$('div#content').append( contentAnalytics );
