@@ -38,7 +38,6 @@ $("input[name='radio']").click(function() {
       contentType: 'application/json',
       dataType: 'json'
     });
-
     $.ajax({
       type: "POST",
       url: '/' + endpoint,
@@ -143,9 +142,6 @@ function loadContent(){
 		'      On this page you can find information regarding Emission Savings and Fridge Openings </div>'+
 		'	   <div class="col-md-4 content-right"></div>'+
 		'  </div>'+
-		function changingImg(){
-    		document.getElementById("y").src="../histogram.png"
-		}
 		'</div>');
 	$('div#content').append( contentAnalytics );
 	
