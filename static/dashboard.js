@@ -38,6 +38,21 @@ $("input[name='radio']").click(function() {
       contentType: 'application/json',
       dataType: 'json'
     });
+    
+    $.ajax({
+      type: "POST",
+      url: '/' + endpoint,
+      data: JSON.stringify(payload), //NEEDS TO BE IN PROPER FORMAT
+      success: function ( data ) {
+        console.log( "Success" );
+        console.log( data );
+      },
+      error: function(e) {
+        console.log( e );
+      },
+      contentType: 'application/json',
+      dataType: 'json'
+    });    
 
 
     alert(option + ' try');
@@ -327,7 +342,7 @@ function loadStreamPlot( object_id, stream_id, active ){
 				type: 'spline'
 		},
 		title: {
-				text: stream_id +'vs Time'
+				text: stream_id +' vs Time'
 		},
 		subtitle: {
 				text: ""
