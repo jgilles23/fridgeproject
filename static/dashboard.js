@@ -154,19 +154,7 @@ function loadContent(){
 	contentPlots.hide();
 	$('div#content').append( contentPlots );
 	
-	var contentAnalytics = $(
-		'<div id="content-Analytics" class="col-md-12 sub-contents">'+
-		'	 <div class="row">'+
-		'	   <div class="col-md-12">'+
-		'      <h2 class="sub-header">Analytics</h2>'+
-		'    </div>'+
-		'	   <div class="col-md-8 content-left">'+
-		'      On this page you can find information regarding Emission Savings and Fridge Openings </div>'+
-		'	   <div class="col-md-4 content-right"></div>'+
-		'  </div>'+
-		'</div>');
-	$('div#content').append( contentAnalytics );
-
+	
 	// Load Export
 	var contentExport = $(
 		'<div id="content-Export" class="col-md-12 sub-contents">'+
@@ -329,7 +317,7 @@ function loadStreamPlot( object_id, stream_id, active ){
 				text: 'Plot Title'
 		},
 		subtitle: {
-				text: 
+				text: 'Plot Subtitle'
 		},
 		xAxis: {
 				type: 'datetime',
@@ -343,7 +331,7 @@ function loadStreamPlot( object_id, stream_id, active ){
 		},
 		yAxis: {
 				title: {
-						text: 'Y-label'
+						text: 'Y-Label'
 				}
 		},
 		tooltip: {
