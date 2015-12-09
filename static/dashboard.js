@@ -154,7 +154,19 @@ function loadContent(){
 	contentPlots.hide();
 	$('div#content').append( contentPlots );
 	
-	
+	var contentAnalytics = $(
+		'<div id="content-Overview" class="col-md-12 sub-contents">'+
+		'	 <div class="row">'+
+		'	   <div class="col-md-12">'+
+		'      <h2 class="sub-header">Overview</h2>'+
+		'    </div>'+
+		'	   <div class="col-md-8 content-left">'+
+		'      THIS IS SOME DATA ANALYTICS SHIT AT ITS FINEST BRUH webpage is an example of a dashboard.</div>'+
+		'	   <div class="col-md-4 content-right"></div>'+
+		'  </div>'+
+		'</div>');
+	$('div#content').append( contentOverview );
+
 	// Load Export
 	var contentExport = $(
 		'<div id="content-Export" class="col-md-12 sub-contents">'+
