@@ -330,7 +330,7 @@ function loadStreamPlot( object_id, stream_id, active ){
 				text: 'Plot Title'
 		},
 		subtitle: {
-				text: 'Plot Subtitle'
+				text: stream_id
 		},
 		xAxis: {
 				type: 'datetime',
