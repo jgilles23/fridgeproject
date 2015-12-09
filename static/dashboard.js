@@ -327,10 +327,10 @@ function loadStreamPlot( object_id, stream_id, active ){
 				type: 'spline'
 		},
 		title: {
-				text: 'Plot Title'
+				text: stream_id +'vs Time'
 		},
 		subtitle: {
-				text: stream_id
+				text: ""
 		},
 		xAxis: {
 				type: 'datetime',
@@ -344,7 +344,7 @@ function loadStreamPlot( object_id, stream_id, active ){
 		},
 		yAxis: {
 				title: {
-						text: 'Y-Label'
+						text: stream_id
 				}
 		},
 		tooltip: {
